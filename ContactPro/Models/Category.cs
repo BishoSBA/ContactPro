@@ -14,5 +14,6 @@ namespace ContactPro.Models
 
         //Virtuals
         public virtual AppUser? AppUser { get; set; }
+        public virtual ICollection<Contact> Contacts { get; set; } = new HashSet<Contact>();
     }
 }
