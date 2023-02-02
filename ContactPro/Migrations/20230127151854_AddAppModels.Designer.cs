@@ -156,7 +156,7 @@ namespace ContactPro.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("BirthDate")
-                        .HasColumnType("text");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("City")
                         .IsRequired()

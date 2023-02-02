@@ -23,7 +23,7 @@ namespace ContactPro.Models
 
         [Display(Name = "Birthday")]
         [DataType(DataType.Date)]
-        public string? BirthDate { get; set; }
+        public DateTime? BirthDate { get; set; }
         [Required]
         public Countries Country { get; set; }
 

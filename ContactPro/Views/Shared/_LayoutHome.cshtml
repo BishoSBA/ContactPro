@@ -30,7 +30,7 @@
 </head>
 <body>
     <header>
-        
+
         <nav class="navbar navbar-expand-md navbar-light fixed-top border-bottom border-light navShadow">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"><img src="/img/ContactPro.png" height=45></a>
@@ -45,22 +45,22 @@
                         </li>
                         @if (SignInManager.IsSignedIn(User))
                         {
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Contacts" asp-action="Index">Contacts</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Categories" asp-action="Index">Categories</a>
-                        </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Contacts" asp-action="Index">Contacts</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Categories" asp-action="Index">Categories</a>
+                            </li>
                         }
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>
             </div>
         </nav>
-        
+
     </header>
     <main class="content" id="mainHero">
-        <section class="container  h-100">
+        <section class="container-fluid  h-100">
             @RenderBody()
         </section>
     </main>
@@ -70,10 +70,11 @@
             <div class="col">
                 <div class="row align-items-center gy-2">
                     <div class="col d-flex justify-content-center justify-content-md-start order-last order-md-first copyright">
-                        &copy; 2023 Beshir Saeed All Rights Reserved</div>
+                        &copy; 2023 Beshir Saeed All Rights Reserved
+                    </div>
                     <div class="col d-flex justify-content-center">
 
-                                          <img src="~/img/ContactPro.png" height="50">
+                        <img src="~/img/ContactPro.png" height="50">
                     </div>
                     <div class="col-12 col-md d-flex justify-content-center justify-content-md-end">
                         <a href="https://www.linkedin.com/in/beshir-saeed/" class="socialicons"><i class="bi bi-linkedin p-2 "></i></a>
