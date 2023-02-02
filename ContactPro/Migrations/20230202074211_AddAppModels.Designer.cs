@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ContactPro.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230127151854_AddAppModels")]
+    [Migration("20230202074211_AddAppModels")]
     partial class AddAppModels
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -155,7 +155,7 @@ namespace ContactPro.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("BirthDate")
+                    b.Property<DateTime?>("BirthDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("City")
