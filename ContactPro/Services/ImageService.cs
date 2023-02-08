@@ -6,6 +6,22 @@ namespace ContactPro.Services
     {
         private readonly string[] suffixes = { "Bytes", "KB", "MB", "GB", "TB", "PB" };
         private readonly string defaultImage = "img/DefaultContactImage.png";
+
+        public string ConvertByteArrayToFile(byte[] fileData, string extension)
+        {
+            if (fileData is null) return defaultImage;
+
+            try
+            {
+                string imageBase64Data = Convert.ToBase64String(fileData);
+                return string.Format("data:image/{0};base64,{1}", extension, imageBase64Data);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+        }
         public async Task<byte[]> ConvertFileToByteArrayAsync(IFormFile file)
         {
             try
@@ -19,21 +35,6 @@ namespace ContactPro.Services
             {
                 throw;
             }
-        }
-
-        public string ConvertByteArrayToFile(byte[] fileData, string extension)
-        {
-            if (fileData is null) return defaultImage;
-            
-            try
-            {
-                string imageBase64Data= Convert.ToBase64String(fileData);
-                return string.Format("data:image/{0};base64,{1}", extension, imageBase64Data);
-            }
-            catch (Exception)
-            {
-                throw;
-            
         }
     }
 }
