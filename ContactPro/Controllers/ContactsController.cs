@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using ContactPro.Data;
 using ContactPro.Models;
+using ContactPro.Models.ViewModels;
 using ContactPro.Enums;
 using ContactPro.Services.Interfaces;
 using ContactPro.Services;
@@ -99,6 +100,35 @@ namespace ContactPro.Controllers
             ViewData["CategoryId"] = new SelectList(appUser.Categories, "Id", "Name", 0);
 
             return View(nameof(Index), contacts);
+        }
+
+        // GET: Contacts/EmailContact/5
+        [Authorize]
+        public async Task<IActionResult> EmailContact(int Id)
+        {
+            string appUserId = _userManager.GetUserId(User);
+            Contact? contact = await _context.Contacts.Where(c => c.Id == Id && c.AppUserId == appUserId)
+                                                     .FirstOrDefaultAsync();
+
+            if(contact == null)
+            {
+                return NotFound();
+            }
+
+            EmailData emailData = new()
+            {
+                EmailAddress = contact.Email,
+                FirstName = contact.FirstName,
+                LastName = contact.LastName,
+            };
+
+            EmailContactViewModel model = new()
+            {
+                Contact = contact,
+                EmailData = emailData
+            };
+
+            return View(model);
         }
 
         // GET: Contacts/Details/5
@@ -202,7 +232,7 @@ namespace ContactPro.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,AppUserId,FirstName,LastName,BirthDate,Country,City,State,Address1,Address2,PostalCode,Email,PhoneNumber,Created,ImageData,ImageType")] Contact contact)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,AppUserId,FirstName,LastName,BirthDate,Country,City,State,Address1,Address2,PostalCode,Email,PhoneNumber,Created, ImageFile,ImageData,ImageType")] Contact contact, List<int> CategoryList)
         {
             if (id != contact.Id)
             {
@@ -213,8 +243,36 @@ namespace ContactPro.Controllers
             {
                 try
                 {
+                    contact.Created = DateTime.SpecifyKind(contact.Created, DateTimeKind.Utc);
+
+                    if(contact.BirthDate != null)
+                    {
+                        contact.BirthDate = DateTime.SpecifyKind(contact.BirthDate.Value, DateTimeKind.Utc);
+                    }
+
+                    if(contact.ImageFile != null)
+                    {
+                        contact.ImageData = await _imageService.ConvertFileToByteArrayAsync(contact.ImageFile);
+                        contact.ImageType = contact.ImageFile.ContentType;
+                    }
+
                     _context.Update(contact);
                     await _context.SaveChangesAsync();
+
+                    //save list of categories
+                    //Remove old list of categories
+                    List<Category> oldCategories = (await _addressBookService.GetContactCategoriesAsync(contact.Id)).ToList();
+                    foreach (Category category in oldCategories)
+                    {
+                        await _addressBookService.RemoveContactFromCategoryAsync(category.Id, contact.Id);
+                    }
+
+                    //Add new list of categories
+                    foreach (int categoryId in CategoryList)
+                    {
+                        await _addressBookService.AddContactToCategoryAsync(categoryId, contact.Id);
+                    }
+
                 }
                 catch (DbUpdateConcurrencyException)
                 {
