@@ -1,10 +1,8 @@
 ﻿@model ContactPro.Models.ViewModels.EmailContactViewModel
 
-@{
-}
-
 <h1>Email Contact</h1>
 
+<h1>Email Contact</h1>
 <div class="p-2">
     <form asp-action="EmailContact" asp-controller="Contacts" method="post">
         <input type="hidden" asp-for="@Model.EmailData.GroupName" />

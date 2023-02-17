@@ -137,22 +137,25 @@ namespace ContactPro.Controllers
         // POST: Contacts/EmailContact/5
         [HttpPost]
         [Authorize]
-
         public async Task<IActionResult> EmailContact(EmailContactViewModel ecvm)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 try
                 {
+                    //send email => getting the address,subject and body
                     await _emailService.SendEmailAsync(ecvm.EmailData.EmailAddress, ecvm.EmailData.Subject, ecvm.EmailData.Body);
                     return RedirectToAction("Index", "Contacts");
                 }
-                catch
+                catch (Exception)
                 {
+                    //if anything w/ email has changed or etc
+                    return RedirectToAction("Index", "Contacts");
                     throw;
                 }
             }
             return View(ecvm);
+
         }
 
         // GET: Contacts/Details/5
